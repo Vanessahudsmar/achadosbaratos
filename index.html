@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AchadosBaratos | Ofertas Selecionadas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #D32F2F; 
+            --dark: #121212;
+            --bg: #F8F9FA;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+
+        /* --- HEADER --- */
+        header { background: var(--white); border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        .header-top { max-width: 1300px; margin: 0 auto; display: flex; align-items: center; padding: 15px 20px; gap: 30px; }
+        .logo { font-weight: 800; font-size: 24px; color: var(--primary); text-decoration: none; letter-spacing: -1px; display: flex; align-items: center; gap: 8px; }
+        .search-bar { flex: 1; display: flex; background: #f1f1f1; border-radius: 50px; padding: 5px 5px 5px 20px; transition: 0.3s; }
+        .search-bar:focus-within { background: #fff; box-shadow: 0 0 0 2px var(--primary); }
+        .search-bar input { border: none; background: none; flex: 1; outline: none; font-size: 14px; }
+        .search-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; }
+
+        .nav-sub { background: var(--dark); padding: 12px 0; }
+        .nav-links { max-width: 1300px; margin: 0 auto; display: flex; gap: 30px; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
+        .nav-links a { color: #ccc; text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; white-space: nowrap; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- MARQUEE (A FAIXA PRETA QUE ANDA) --- */
+        .marquee-container { width: 100%; background: var(--dark); padding: 15px 0; overflow: hidden; display: flex; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary); margin-bottom: 20px; }
+        .marquee-content { display: flex; white-space: nowrap; animation: scroll 40s linear infinite; }
+        .marquee-item { display: flex; align-items: center; color: white; font-size: 14px; font-weight: 800; padding: 0 30px; text-transform: uppercase; letter-spacing: 1px; }
+        .marquee-item i { color: var(--primary); margin-right: 10px; font-size: 18px; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- LAYOUT --- */
+        .main-container { max-width: 1300px; margin: 0 auto; padding: 20px; }
+        .section-banner { width: 100%; border-radius: 15px; overflow: hidden; margin-top: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+        .section-banner img { width: 100%; display: block; object-fit: cover; }
+        .section-title { font-weight: 800; border-left: 5px solid var(--primary); padding-left: 15px; margin: 25px 0 15px; }
+        .sub-title { font-size: 14px; font-weight: 700; color: #666; margin: 20px 0 10px 5px; text-transform: uppercase; }
+
+        /* --- CARROSSEL --- */
+        .carousel-wrapper { position: relative; width: 100%; margin-bottom: 40px; }
+        .product-grid { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 15px; padding: 10px 5px 20px; scrollbar-width: none; }
+        .product-grid::-webkit-scrollbar { display: none; }
+
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9); color: var(--dark);
+            border: 1px solid #ddd; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            z-index: 10; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .carousel-arrow:hover { background: var(--white); color: var(--primary); transform: translateY(-50%) scale(1.1); }
+        .carousel-arrow.left { left: -15px; }
+        .carousel-arrow.right { right: -15px; }
+
+        /* CARD */
+        .card { 
+            background: var(--white); border-radius: 16px; padding: 15px; 
+            border: 1px solid #f0f0f0; display: flex; flex-direction: column; 
+            min-width: 200px; max-width: 200px; flex-shrink: 0; transition: 0.4s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary); }
+        .card-img { width: 100%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .card-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .product-title { font-size: 12px; font-weight: 600; min-height: 38px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
+        .price { font-size: 18px; font-weight: 800; color: var(--dark); margin-top: auto; }
+        .btn-view { background: #f1f1f1; color: var(--dark); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 11px; margin-top: 12px; transition: 0.3s; }
+        .card:hover .btn-view { background: var(--primary); color: white; }
+
+        footer { background: var(--dark); color: white; text-align: center; padding: 40px 20px; margin-top: 60px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <a href="#" class="logo"><i class="fas fa-shopping-cart"></i> Achados<b>Baratos</b></a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="O que você quer economizar hoje?">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <nav class="nav-sub">
+            <div class="nav-links">
+                <a href="#tecnologia">TECNOLOGIA</a>
+                <a href="#beleza">BELEZA</a>
+                <a href="#casa">CASA</a>
+                <a href="#achados20">OFERTAS R$20</a>
+            </div>
+        </nav>
+    </header>
+
+    
+
+    <main class="main-container">
+        <div class="section-banner">
+            <img src="header.png" alt="Destaques da Semana">
+        </div>
+<div class="marquee-container">
+        <div class="marquee-content">
+            <div class="marquee-item"><i class="fas fa-microchip"></i> Tecnologia Barata</div>
+            <div class="marquee-item"><i class="fas fa-search-dollar"></i> Achados da Internet</div>
+            <div class="marquee-item"><i class="fas fa-bolt"></i> Produtos Viralizados</div>
+            <div class="marquee-item"><i class="fas fa-stopwatch"></i> Ofertas Relâmpago</div>
+            <div class="marquee-item"><i class="fas fa-fire"></i> Mais Vendidos</div>
+            <div class="marquee-item"><i class="fas fa-home"></i> Casa Inteligente</div>
+            <div class="marquee-item"><i class="fas fa-sparkles"></i> Beleza em Promoção</div>
+            <div class="marquee-item"><i class="fas fa-tag"></i> Super Descontos</div>
+            <div class="marquee-item"><i class="fas fa-microchip"></i> Tecnologia Barata</div>
+            <div class="marquee-item"><i class="fas fa-search-dollar"></i> Achados da Internet</div>
+            <div class="marquee-item"><i class="fas fa-bolt"></i> Produtos Viralizados</div>
+            <div class="marquee-item"><i class="fas fa-stopwatch"></i> Ofertas Relâmpago</div>
+            <div class="marquee-item"><i class="fas fa-fire"></i> Mais Vendidos</div>
+            <div class="marquee-item"><i class="fas fa-home"></i> Casa Inteligente</div>
+            <div class="marquee-item"><i class="fas fa-sparkles"></i> Beleza em Promoção</div>
+            <div class="marquee-item"><i class="fas fa-tag"></i> Super Descontos</div>
+        </div>
+    </div>
+        <div class="section-banner" id="tecnologia">
+            <img src="TECNOLOGIA BARATA.png" alt="Tecnologia">
+        </div>
+        
+        <h2 class="section-title">Tecnologia</h2>
+
+        <h3 class="sub-title">Fones de Ouvido</h3>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-fones', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-fones', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-fones"></div>
+        </div>
+
+        <h3 class="sub-title">Smartwatches e Relógios</h3>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-relogios', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-relogios', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-relogios"></div>
+        </div>
+
+        <h3 class="sub-title">Câmera de Segurança Wi‑Fi 360°</h3>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-setup', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-setup', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-setup"></div>
+        </div>
+
+        <h3 class="sub-title">Mundo Gamer</h3>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-gadgets', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-gadgets', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-gadgets"></div>
+        </div>
+
+        <h3 class="sub-title">Tecnologia Diversos</h3>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-gamer', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-gamer', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-gamer"></div>
+        </div>
+
+        <div class="section-banner" id="beleza">
+            <img src="beleza.png" alt="Beleza">
+        </div>
+        <h2 class="section-title">Beleza & Cuidados</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-beleza', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-beleza', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-beleza"></div>
+        </div>
+
+        <div class="section-banner" id="casa">
+            <img src="casa.png" alt="Casa">
+        </div>
+        <h2 class="section-title">Tudo para sua Casa</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-casa', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-casa', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-casa"></div>
+        </div>
+
+        <div class="section-banner" id="achados20">
+            <img src="achados de 20.png" alt="Até R$20">
+        </div>
+        <h2 class="section-title">Garimpo até R$ 20</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" onclick="sideScroll('grid-achados', 'left')"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" onclick="sideScroll('grid-achados', 'right')"><i class="fas fa-chevron-right"></i></button>
+            <div class="product-grid" id="grid-achados"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="margin-bottom: 20px;">
+                <a href="#" style="color: var(--primary); font-weight: 800; font-size: 20px; text-decoration: none;">
+                    <i class="fas fa-shopping-cart"></i> Achados<b>Baratos</b>
+                </a>
+            </div>
+
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; line-height: 1.6;">
+                O <b>AchadosBaratos</b> é um site de curadoria de ofertas. Não vendemos produtos diretamente. 
+                Ao clicar nos links de "Ver Oferta", você será redirecionado para sites parceiros (como Shopee, Amazon, etc). 
+                Como <b>afiliados</b>, podemos receber uma pequena comissão por compras válidas realizadas através desses links, 
+                sem nenhum custo adicional para você. Isso nos ajuda a manter o site atualizado com as melhores promoções!
+            </p>
+
+            <div style="margin-bottom: 20px;">
+                <a href="mailto:hudsmarvanessa@gmail.com" style="color: #ccc; text-decoration: none; font-size: 14px;">
+                    <i class="fas fa-envelope"></i> hudsmarvanessa@gmail.com
+                </a>
+            </div>
+
+            <p style="font-size: 11px; color: #555; border-top: 1px solid #333; padding-top: 20px;">
+                © 2026 AchadosBaratos • Desenvolvido com foco em economia real.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+    function sideScroll(elementId, direction) {
+        const container = document.getElementById(elementId);
+        const scrollAmount = 400;
+        if (direction === 'left') {
+            container.scrollLeft -= scrollAmount;
+        } else {
+            container.scrollLeft += scrollAmount;
+        }
+    }
+
+    async function fetchProducts(category) {
+        try {
+            const res = await fetch(`http://localhost:3000/api/products/${category}`);
+            return await res.json();
+        } catch (err) { return []; }
+    }
+
+    function renderProducts(containerId, products) {
+        const grid = document.getElementById(containerId);
+        if(!grid || products.length === 0) return;
+        grid.innerHTML = products.map(p => `
+            <div class="card">
+                <div class="card-img"><img src="${p.image_url}" alt="${p.name}"></div>
+                <p class="product-title">${p.name}</p>
+                <div class="price">R$ ${p.price}</div>
+                <a href="${p.aff_link}" class="btn-view" target="_blank">Ver Oferta</a>
+            </div>
+        `).join('');
+    }
+
+    async function init() {
+        const mapeamento = {
+            'fones': 'grid-fones',
+            'relogios': 'grid-relogios',
+            'setup': 'grid-setup',
+            'gadgets': 'grid-gadgets',
+            'gamer': 'grid-gamer',
+            'beleza': 'grid-beleza',
+            'casa': 'grid-casa',
+            'achados20': 'grid-achados'
+        };
+
+        for (const [apiCat, divId] of Object.entries(mapeamento)) {
+            const data = await fetchProducts(apiCat);
+            renderProducts(divId, data);
+        }
+    }
+
+    init();
+    </script>
+</body>
+</html>

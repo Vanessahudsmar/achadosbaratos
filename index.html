@@ -31,7 +31,7 @@
         .nav-links { max-width: 1300px; margin: 0 auto; display: flex; gap: 30px; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
         .nav-links a { color: #ccc; text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; white-space: nowrap; }
 
-        /* --- MARQUEE (A BARRINHA QUE ANDA) --- */
+        /* --- MARQUEE --- */
         .marquee-container { width: 100%; background: var(--dark); padding: 15px 0; overflow: hidden; display: flex; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary); margin: 20px 0; }
         .marquee-content { display: flex; white-space: nowrap; animation: scroll 30s linear infinite; }
         .marquee-item { color: white; font-size: 14px; font-weight: 800; padding: 0 30px; text-transform: uppercase; display: flex; align-items: center; }
@@ -42,44 +42,48 @@
         .main-container { max-width: 1300px; margin: 0 auto; padding: 20px; }
         .section-banner { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow); }
         .section-banner img { width: 100%; display: block; object-fit: cover; }
-        .section-title { font-weight: 800; border-left: 5px solid var(--primary); padding-left: 15px; margin: 25px 0 15px; }
+        .section-title { font-weight: 800; border-left: 5px solid var(--primary); padding-left: 15px; margin: 40px 0 15px; }
         .sub-title { font-size: 14px; font-weight: 700; color: #666; margin: 20px 0 10px 5px; text-transform: uppercase; }
 
         /* --- CARROSSEL --- */
-        .carousel-wrapper { position: relative; width: 100%; margin-bottom: 40px; }
-        .product-grid { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 15px; padding: 10px 5px 20px; scrollbar-width: none; }
+        .carousel-wrapper { position: relative; width: 100%; margin-bottom: 40px; display: flex; align-items: center; }
+        .product-grid { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 15px; padding: 10px 5px 20px; scrollbar-width: none; -ms-overflow-style: none; }
         .product-grid::-webkit-scrollbar { display: none; }
 
         .carousel-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
-            background: white; border: 1px solid #ddd; width: 40px; height: 40px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;
+            background: var(--white); border: 1px solid #ddd; width: 45px; height: 45px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s;
         }
-        .carousel-arrow.left { left: -15px; }
-        .carousel-arrow.right { right: -15px; }
+        .carousel-arrow:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .carousel-arrow.left { left: -20px; }
+        .carousel-arrow.right { right: -20px; }
 
         /* CARD */
         .card { 
             background: var(--white); border-radius: 16px; padding: 15px; 
             border: 1px solid #f0f0f0; display: flex; flex-direction: column; 
-            min-width: 200px; max-width: 200px; flex-shrink: 0; transition: 0.3s;
+            min-width: 220px; max-width: 220px; flex-shrink: 0; transition: 0.3s;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: var(--shadow); }
         .card-img { width: 100%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
         .card-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .product-title { font-size: 12px; font-weight: 600; min-height: 38px; overflow: hidden; margin-bottom: 10px; }
-        .price { font-size: 18px; font-weight: 800; color: var(--dark); margin-top: auto; }
-        .btn-view { background: #f1f1f1; color: var(--dark); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 11px; margin-top: 12px; }
+        .product-title { font-size: 13px; font-weight: 600; min-height: 40px; overflow: hidden; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .price { font-size: 20px; font-weight: 800; color: var(--dark); margin-top: auto; }
+        .btn-view { background: #f1f1f1; color: var(--dark); text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; margin-top: 12px; transition: 0.3s; }
         .card:hover .btn-view { background: var(--primary); color: white; }
 
         @media (max-width: 768px) {
             .header-top { flex-direction: column; gap: 15px; padding: 15px; }
             .search-bar { width: 100%; }
             .carousel-arrow { display: none; }
-            .card { min-width: 160px; max-width: 160px; }
+            .card { min-width: 180px; max-width: 180px; }
+            .carousel-arrow.left { left: 0px; }
+            .carousel-arrow.right { right: 0px; }
         }
 
-        footer { background: var(--dark); color: white; text-align: center; padding: 40px 20px; margin-top: 60px; }
+        footer { background: var(--dark); color: white; text-align: center; padding: 60px 20px; margin-top: 80px; }
     </style>
 </head>
 <body>
@@ -131,34 +135,54 @@
             <h3 class="sub-title">Fones de Ouvido</h3>
             <div class="carousel-wrapper">
                 <button class="carousel-arrow left" onclick="sideScroll('grid-fones', 'left')"><i class="fas fa-chevron-left"></i></button>
-                <button class="carousel-arrow right" onclick="sideScroll('grid-fones', 'right')"><i class="fas fa-chevron-right"></i></button>
                 <div class="product-grid" id="grid-fones"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-fones', 'right')"><i class="fas fa-chevron-right"></i></button>
             </div>
 
             <h3 class="sub-title">Smartwatches</h3>
             <div class="carousel-wrapper">
                 <button class="carousel-arrow left" onclick="sideScroll('grid-relogios', 'left')"><i class="fas fa-chevron-left"></i></button>
-                <button class="carousel-arrow right" onclick="sideScroll('grid-relogios', 'right')"><i class="fas fa-chevron-right"></i></button>
                 <div class="product-grid" id="grid-relogios"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-relogios', 'right')"><i class="fas fa-chevron-right"></i></button>
             </div>
 
             <h3 class="sub-title">Câmeras</h3>
-            <div class="carousel-wrapper"><div class="product-grid" id="grid-setup"></div></div>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-setup', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-setup"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-setup', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
              
             <h3 class="sub-title">Mundo Gamer</h3>
-            <div class="carousel-wrapper"><div class="product-grid" id="grid-gadgets"></div></div>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-gadgets', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-gadgets"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-gadgets', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
 
             <div id="beleza" class="section-banner"><img src="beleza.png"></div>
             <h2 class="section-title">Beleza</h2>
-            <div class="carousel-wrapper"><div class="product-grid" id="grid-beleza"></div></div>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-beleza', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-beleza"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-beleza', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
 
             <div id="casa" class="section-banner"><img src="casa.png"></div>
             <h2 class="section-title">Casa</h2>
-            <div class="carousel-wrapper"><div class="product-grid" id="grid-casa"></div></div>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-casa', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-casa"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-casa', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
 
             <div id="achados20" class="section-banner"><img src="achados de 20.png"></div>
             <h2 class="section-title">Até R$ 20</h2>
-            <div class="carousel-wrapper"><div class="product-grid" id="grid-achados"></div></div>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-achados', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-achados"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-achados', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
     </main>
 
@@ -181,21 +205,125 @@
     </footer>
 
     <script>
+        const produtosDB = {
+            fones: [
+                { name: "Fone de Ouvido Sem fio Bluetooth TWS Kaidi KD-780", price: "42,80", image_url: "fonedeouvido.jpeg", aff_link: "https://s.shopee.com.br/40bk8OA8bM" },
+                { name: "Fone de Ouvido Sem fio Bluetooth TWS Gamer Kaidi KD-776", price: "78,80", image_url: "fonedeouvido1.webp", aff_link: "https://s.shopee.com.br/4AvAKh9VGP" },
+                { name: "Fone de Ouvido Bluetooth Sem Fio TWS Kaidi KD-779N", price: "46,80", image_url: "fonedeouvido2.webp", aff_link: "https://s.shopee.com.br/4LEaX08rvS" },
+                { name: "INOVA FON30167 TWS Fone Bluetooth 5.3 Estéreo HIFI", price: "95,00", image_url: "fonedeouvido3.webp", aff_link: "https://s.shopee.com.br/60MoW42WXo" },
+                { name: "INOVA FON30167 TWS Fone Bluetooth 5.3 Estéreo HIFI", price: "59,99", image_url: "fone1.webp", aff_link: "https://s.shopee.com.br/5q3OMUMgC8" },
+                { name: "Fone De Ouvido Tws Bluetooth V5.0 Touch - I12", price: "25,40", image_url: "fone2.webp", aff_link: "https://s.shopee.com.br/5fjyABNJX7" },
+                { name: "Fone Bluetooth 5.3 Gamer Sem Fio TWS Display Digital", price: "34,90", image_url: "fone3.webp", aff_link: "https://s.shopee.com.br/5VQXxsNws6" },
+                { name: "Fone de Ouvido Bluetooth i11 TWS Sem Fio", price: "24,98", image_url: "fone4.webp", aff_link: "https://s.shopee.com.br/5L77lZOaD5" },
+                { name: "Fone de Ouvido Bluetooth HAVIT TW976", price: "94,05", image_url: "fone5.webp", aff_link: "https://s.shopee.com.br/6VJ59iK8qK" },
+                { name: "Air Pro 4 Tws Fone De Ouvido Sem Fio Bluetooth", price: "19,99", image_url: "fone6.webp", aff_link: "https://s.shopee.com.br/15bQSrulr" },
+                { name: "Fone Bluetooth Sem Fio TWS com Power Bank", price: "25,99", image_url: "fone7.webp", aff_link: "https://s.shopee.com.br/5AnhZxYFHs" },
+                { name: "Fone De Ouvido Bluetooth Sem Fio Condução Óssea", price: "39,90", image_url: "fone8.webp", aff_link: "https://s.shopee.com.br/50UHNeYscr" },
+                { name: "13 TWS Sem Fio Bluetooth 5.0 Air Pro 3", price: "16,66", image_url: "fone9.webp", aff_link: "https://s.shopee.com.br/4qArBLZVxq" },
+                { name: "Air31 TWS Fone De Ouvido Bluetooth 5.3", price: "20,88", image_url: "fone10.webp", aff_link: "https://s.shopee.com.br/4frQz2a9Ip" },
+                { name: "Bluetooth Sem fio Fone de ouvido Ergonômico TWS", price: "19,99", image_url: "fone11.webp", aff_link: "https://s.shopee.com.br/3B2dD500Yp" },
+                { name: "Fone de Ouvido Bluetooth TWS M25 Original", price: "21,99", image_url: "fone13.webp", aff_link: "https://s.shopee.com.br/3VfTbyV7op" }
+            ],
+            relogios: [
+                { name: "Smartwatch W29 Pro Serie 9 Ilha Dinamica Nfc Bussola", price: "130,10", image_url: "relogio1.webp", aff_link: "https://s.shopee.com.br/3LM3QQlyJE" },
+                { name: "Relógio Smartwatch W11 Mini PRO Tela AMOLED", price: "167,39", image_url: "relogio2.webp", aff_link: "https://s.shopee.com.br/4LEacMAwWE" },
+                { name: "Watch X Smartwatch Relogio Serie 10 Amoled", price: "185,90", image_url: "relogio3.webp", aff_link: "https://s.shopee.com.br/807szDpYiz" },
+                { name: "Smartwatch D20 relógio Colocar foto com tela hd", price: "19,98", image_url: "relogio4.webp", aff_link: "https://s.shopee.com.br/900QB8sOWs" },
+                { name: "Smartwatch D20 Pró/ Coloca Foto na Tela", price: "18.98", image_url: "relogio5.webp", aff_link: "https://s.shopee.com.br/60MoblMrD7" },
+                { name: "Relógio Digital Smartwatch A Prova De Agua", price: "10,00", image_url: "relogio6.webp", aff_link: "https://s.shopee.com.br/5L77odnMz2" },
+                { name: "PELÍCULA APPLE WATCH Smartwatch Gel 3D", price: "8,50", image_url: "relogio7.webp", aff_link: "https://s.shopee.com.br/7KsCCPCeve" },
+                { name: "Novo Smartwatch Relógio Inteligente Assistente Voz", price: "68,00", image_url: "relogio8.webp", aff_link: "https://s.shopee.com.br/4AvAQlKGqe" },
+                { name: "Smartwatch série original T800 Ultra NFC 2.4 Hd", price: "39.90", image_url: "relogio9.webp", aff_link: "https://s.shopee.com.br/50UHQOsPSc" },
+                { name: "Relógio Digital Masculino Feminino Led Quadrado", price: "9.99", image_url: "relogio10.webp", aff_link: "https://s.shopee.com.br/AACNZzEVmq" },
+            ],
+            setup: [
+                { name: "Tapo C500 - Câmera de Segurança Externa Wi-Fi 1080P", price: "159,90", image_url: "camera1.webp", aff_link: "https://s.shopee.com.br/6VJ5EELUsz" },
+                { name: "Câmera De Segurança V3 A808 Wi-Fi HD", price: "83,51", image_url: "camera2.webp", aff_link: "https://s.shopee.com.br/900QCxZQCP" },
+                { name: "Câmera De Segurança Lâmpada Sem Fio Wi-fi IP 360°", price: "51,50", image_url: "camera3.webp", aff_link: "https://s.shopee.com.br/10y8gLANkC" },
+                { name: "Câmera de Segurança Inteligente Wi-Fi Full HD 3MP", price: "89,59", image_url: "camera4.webp", aff_link: "https://s.shopee.com.br/70FLpScanF" },
+                { name: "Tapo C200 - Câmera de Segurança Interna Wi-Fi 1080P", price: "179,91", image_url: "camera5.webp", aff_link: "https://s.shopee.com.br/3B2dGUBQmC" },
+                { name: "KIT 2 Câmera segurança wi-fi ip sem fio V360", price: "49,99", image_url: "camera6.webp", aff_link: "https://s.shopee.com.br/2LTWH3KqEM" },
+                { name: "Câmera IP Externa à Prova d’Água com Wi-Fi Dual", price: "133,00", image_url: "camera8.webp", aff_link: "https://s.shopee.com.br/3LM3T8SVNr" },
+            ],
+            gadgets: [
+                { name: "Teclado Gamer RGB Precision Semi Mecânico", price: "65,97", image_url: "teclado1.webp", aff_link: "https://s.shopee.com.br/7fV2dccgDf" },
+                { name: "Headset Gamer Haven Ultra RGB Profissional", price: "100,08", image_url: "teclado2.webp", aff_link: "https://s.shopee.com.br/AACNcLHTZB" },
+                { name: "Mouse Gamer Fade LED RGB 8000DPI Soft", price: "81,58", image_url: "teclado3.webp", aff_link: "https://s.shopee.com.br/AACNcR1iNN" },
+                { name: "Teclado Gamer Doppler RGB Base em LED", price: "83,49", image_url: "teclado4.webp", aff_link: "https://s.shopee.com.br/4frR4QBZFL" },
+                { name: "Controle Gamepad Bluetooth Gamer Celular", price: "84,55", image_url: "teclado5.webp", aff_link: "https://s.shopee.com.br/LiRuYPdkn" },
+                { name: "Fone De Ouvido Gamer Com Microfone P2 Para PC", price: "45,99", image_url: "teclado6.webp", aff_link: "https://s.shopee.com.br/5L77rpM2zX" },
+                { name: "Kit Teclado Semi Mecânico + Mouse Gamer 3200dpi", price: "47,88", image_url: "teclado7.webp", aff_link: "https://s.shopee.com.br/1Laz6bPNiI" },
+                { name: "BASIKE Mouse Gamer Gamer Completo Gamer RGB", price: "48,00", image_url: "teclado8.webp", aff_link: "https://s.shopee.com.br/15bWGRM36" },
+                { name: "Teclado Gamer Vivensis Viper Pro Python", price: "39,99", image_url: "teclado9.webp", aff_link: "https://s.shopee.com.br/8ph02a52oI" },
+            ],
+            beleza: [
+                { name: "Kit Shampoo e Condicionador Pós Química 1L Ahazo", price: "29,99", image_url: "beleza1.webp", aff_link: "https://s.shopee.com.br/9fG74emJ68" },
+                { name: "Aloe Vera Mudança Quente Lip Gloss Líquido", price: "29,99", image_url: "beleza2.webp", aff_link: "https://s.shopee.com.br/4AvAWfHkpY" },
+                { name: "Kit Rapunzel Tonico Do Crescimento 250ml Lola", price: "59,80", image_url: "beleza3.webp", aff_link: "https://s.shopee.com.br/900QHeRWRh" },
+                { name: "Kit Progressiva Lisoterapia S/Formol + Shampoo", price: "59,80", image_url: "belezaq4.webp", aff_link: "https://s.shopee.com.br/3fytvwAY3Z" },
+                { name: "Kit 4 Unidades Morte Súbita Lola – Shampoo", price: "123,31", image_url: "beleza5.webp", aff_link: "https://s.shopee.com.br/3qIK8L799U" },
+                { name: "Kit 5 Sabonete Facial em Espuma GLOW SKIN", price: "80,75", image_url: "beleza6.webp", aff_link: "https://s.shopee.com.br/7VBcVCH6N0" },
+                { name: "Creme Facial Super Hidratante La Belle Paris 50g", price: "18,99", image_url: "beleza7.webp", aff_link: "https://s.shopee.com.br/60MoiZWduQ" },
+                { name: "Kit Pura Beleza 3 ITENS - 1 Escova Magica", price: "15,98", image_url: "beleza8.webp", aff_link: "https://s.shopee.com.br/4frR8ECgZm" },
+                { name: "Kit Sabonete Dermachem Rosa Mosqueta + Esponja", price: "24,66", image_url: "beleza9.webp", aff_link: "https://s.shopee.com.br/6VJ5JjOTQa" },
+                { name: "Kit para Cuidados Faciais Easy Mask Mahav", price: "14,90", image_url: "beleza10.webp", aff_link: "https://s.shopee.com.br/6VJ5Jns013" },
+                { name: "Necessaire Recheada com 4 Mini Máscaras Forever Liss", price: "49,90", image_url: "beleza11.webp", aff_link: "https://s.shopee.com.br/1qXFlITnua" },
+                { name: "Linha Cuide-se Bem Bob Esponja (o Boticário)", price: "32,90", image_url: "beleza12.webp", aff_link: "https://s.shopee.com.br/10y8lq9Imm" },
+                { name: "Necessaire Organizador Cosmético Maquiagem", price: "16,99", image_url: "beleza13.webp", aff_link: "https://s.shopee.com.br/5fjyKW6Zfi" },
+                { name: "Kit 100 Escovinhas Cilios + 100 Aplicadores", price: "17,50", image_url: "beleza14.webp", aff_link: "https://s.shopee.com.br/8KkjVUTrmu" },
+                { name: "ANA1108 KIT 12 Esponja Para Maquiagem/Rosto", price: "19,90", image_url: "beleza15.webp", aff_link: "https://s.shopee.com.br/50UHXRA0tk" },
+                { name: "Conjunto De Maquiagem Modelador De Cílios 3 Em 1", price: "8,40", image_url: "beleza16.webp", aff_link: "https://s.shopee.com.br/7poSuixCvl" },
+                { name: "Kit De Carimbo De Sobrancelha Em Uma Etapa", price: "11,23", image_url: "beleza18.webp", aff_link: "https://s.shopee.com.br/30jD9zy5uO" },
+                { name: "Kit 3 Espelho de Maquiagem Sem Moldura Dobrável", price: "11,64", image_url: "beleza19.webp", aff_link: "https://s.shopee.com.br/5L77wMrWSJ" },
+            ],
+            casa: [
+                { name: "KIT 21 POTES VARIADOS PARA COZINHA", price: "37,53", image_url: "casa1.webp", aff_link: "https://s.shopee.com.br/807t84Ea5B" },
+                { name: "Porta Papel Toalha Triplo Suporte Rolos Cozinha", price: "15,90", image_url: "casa2.webp", aff_link: "https://s.shopee.com.br/3B2dNFDd2k" },
+                { name: "Kit Lencol Jogo De Cama 400 Fios Micropercal", price: "10,90", image_url: "casa3.webp", aff_link: "https://s.shopee.com.br/4VY0xnavVe" },
+                { name: "Porta Tempero Giratorio Preto Com 6/9 Potes", price: "29,89", image_url: "casa4.webp", aff_link: "https://s.shopee.com.br/AKVnuaUyhK" },
+                { name: "Kit até 2 Organizador YY051 Porta Detergente", price: "29,99", image_url: "casa5.webp", aff_link: "https://s.shopee.com.br/W1sCbZ3MA" },
+                { name: "Pote Hermético 2.5L Com Copo Medidor Bico", price: "18,80", image_url: "casa6.webp", aff_link: "https://s.shopee.com.br/LiS0NtWsV" },
+                { name: "Porta Papel Toalha Triplo Suporte Preto Rolo", price: "15,90", image_url: "casa7.webp", aff_link: "https://s.shopee.com.br/1qXFnDz8Vj" },
+                { name: "Escorredor Organizador Utensílios Cozinha", price: "20,99", image_url: "casa8.webp", aff_link: "https://s.shopee.com.br/9fG77gyMLs" },
+                { name: "Jogo Americano para Mesa 7 peças Tear Algodão", price: "19,00", image_url: "casa9.webp", aff_link: "https://s.shopee.com.br/6AgExJS4R7" },
+                { name: "Tela Mosquiteira Regulável p/ Janela Casa", price: "166,25", image_url: "casa10.webp", aff_link: "https://s.shopee.com.br/8KkjXN4XCk" },
+                { name: "Kit de 3 Box de Armazenamento Organização", price: "78,99", image_url: "casa11.webp", aff_link: "https://s.shopee.com.br/900QKgZF9N" },
+                { name: "Saleiro de vidro com tampa e colher de bambu", price: "35,90", image_url: "casa12.webp", aff_link: "https://s.shopee.com.br/6pvvkmJTPS" },
+                { name: "Jogo De Tapete 3 Peças Passadeira Cozinha", price: "19,99", image_url: "casa13.webp", aff_link: "https://s.shopee.com.br/2Vmwasud1B" },
+                { name: "Tapete Banheiro Antiderrapante Absorvente", price: "12,99", image_url: "casa14.webp", aff_link: "https://s.shopee.com.br/AACNj1ukjF" },
+                { name: "Jogo De Pratos Vidro Fundos 4 a 12 Peças", price: "21,90", image_url: "casa15.webp", aff_link: "https://s.shopee.com.br/2g6MnKd1NE" },
+                { name: "Kit com 9 potes de mantimentos plástico decorado", price: "37,90", image_url: "casa16.webp", aff_link: "https://s.shopee.com.br/2Vmwb5Fppu" },
+                { name: "Mini Umidificador Difusor Aromatizador Portátil", price: "12,94", image_url: "casa17.webp", aff_link: "https://s.shopee.com.br/W1sDTmIiR" },
+                { name: "Kit 24 talheres de aço inoxidável de luxo", price: "28,90", image_url: "casa18.webp", aff_link: "https://s.shopee.com.br/10y8oSrr5k" },
+                { name: "Jarra de Vidro Suiça 1L com Tampa Água Suco", price: "19,99", image_url: "casa19.webp", aff_link: "https://s.shopee.com.br/4VY0yz2Z9A" },
+                { name: "360 ° Balde De Esfregão Giratório Multiuso", price: "39,90", image_url: "casa20.webp", aff_link: "https://s.shopee.com.br/AACNjSwybX" },
+            ],
+            achados20: [
+                { name: "Kit Até 20 Pares de Meias Soquete Unissex", price: "18,90", image_url: "201.webp", aff_link: "https://s.shopee.com.br/AACOexZosH" },
+                { name: "Kit Até 20 Suportes de Vassoura Sem Furar", price: "11,99", image_url: "202.webp", aff_link: "https://s.shopee.com.br/30jE7rlkHo" },
+                { name: "Impressão Apostila de 20 até 500 páginas", price: "18,99", image_url: "203.webp", aff_link: "https://s.shopee.com.br/5q3PV8qsED" },
+                { name: "Brincos Para Brinde Uso Pessoal 20 Pares", price: "19,95", image_url: "204.webp", aff_link: "https://s.shopee.com.br/60MphYnkuf" },
+                { name: "Kit Até 20 Pares Luvas Limpeza Multiuso Látex", price: "19,95", image_url: "205.webp", aff_link: "https://s.shopee.com.br/2BA78aMjS6" },
+                { name: "kit até 20 Vaso Pote 15 Preto Para Rosa Mudas", price: "12,90", image_url: "206.webp", aff_link: "https://s.shopee.com.br/2LTXKyoX0J" },
+                { name: "Kit Ate 20 Pano De Limpeza De Arame Metálico", price: "11,90", image_url: "207.webp", aff_link: "https://s.shopee.com.br/9zsyTQq7mr" },
+                { name: "20 Pares de Brincos Pequenos Variados Ferro", price: "19,95", image_url: "209.webp", aff_link: "https://s.shopee.com.br/3qIL8FRUlF" },
+                { name: "Calcinha Feminina Tanguinha Fio Tirinha Kits", price: "19,50", image_url: "210.webp", aff_link: "https://s.shopee.com.br/5q3PVzwCrh" },
+                { name: "Prateleira Concept 60x20cm ou 40x20cm", price: "18,99", image_url: "2113.webp", aff_link: "https://s.shopee.com.br/BP2lfScAp" },
+                { name: "20 borboletas comestível doces e bolos", price: "18,00", image_url: "2012.webp", aff_link: "https://s.shopee.com.br/30jE8wpcIO" },
+                { name: "Kit unidades Relógio Esporte Led à prova d'agua", price: "16,49", image_url: "213.webp", aff_link: "https://s.shopee.com.br/4VY1vmhgFB" },
+                { name: "Porta Ovos 2 - 4 Andares Dispenser até 20 Ovos", price: "10,00", image_url: "214.webp", aff_link: "https://s.shopee.com.br/1qXGkxPPjF" },
+            ]
+        };
+
         let allProductsGlobal = [];
 
         function sideScroll(elementId, direction) {
             const container = document.getElementById(elementId);
-            container.scrollLeft += (direction === 'left' ? -300 : 300);
-        }
-
-        async function loadProducts(category, gridId) {
-            try {
-                const response = await fetch(`http://localhost:3000/api/products/${category}`);
-                const data = await response.json();
-                allProductsGlobal = [...allProductsGlobal, ...data];
-                renderCards(gridId, data);
-            } catch (error) {
-                console.error("Erro ao carregar categoria: " + category);
+            const scrollAmount = 400;
+            if (direction === 'left') {
+                container.scrollLeft -= scrollAmount;
+            } else {
+                container.scrollLeft += scrollAmount;
             }
         }
 
@@ -204,8 +332,8 @@
             if (!grid) return;
             grid.innerHTML = products.map(p => `
                 <div class="card">
-                    <div class="card-img"><img src="${p.image_url}" alt="${p.name}"></div>
-                    <p class="product-title">${p.name}</p>
+                    <div class="card-img"><img src="${p.image_url}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/200?text=Produto'"></div>
+                    <p class="product-title" title="${p.name}">${p.name}</p>
                     <div class="price">R$ ${p.price}</div>
                     <a href="${p.aff_link}" class="btn-view" target="_blank">Ver Oferta</a>
                 </div>
@@ -229,7 +357,7 @@
             }
         }
 
-        async function init() {
+        function init() {
             const config = [
                 {cat: 'fones', grid: 'grid-fones'},
                 {cat: 'relogios', grid: 'grid-relogios'},
@@ -240,9 +368,11 @@
                 {cat: 'achados20', grid: 'grid-achados'}
             ];
 
-            for (const item of config) {
-                await loadProducts(item.cat, item.grid);
-            }
+            config.forEach(item => {
+                const data = produtosDB[item.cat] || [];
+                allProductsGlobal = [...allProductsGlobal, ...data];
+                renderCards(item.grid, data);
+            });
         }
 
         window.onload = init;

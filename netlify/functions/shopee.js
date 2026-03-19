@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 exports.handler = async (event) => {
     const appId = "18373201007";
-    const secret = "Y6G5VSILYVDHCCYOWGZIFZA65DW66WKY";
+    const secret = "QUXQ42B5CM32NKPC753DYINGKBY4FOWO";
     const keyword = (event.queryStringParameters && event.queryStringParameters.keyword) || "ofertas";
     
     const url = "https://open-api.affiliate.shopee.com.br/graphql";

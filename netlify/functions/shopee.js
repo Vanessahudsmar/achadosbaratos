@@ -23,19 +23,12 @@ exports.handler = async (event) => {
                 'Authorization': `SHA256 ${signature}`
             }
         });
-        
         return { 
             statusCode: 200, 
-            headers: { 
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*" 
-            },
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
             body: JSON.stringify(response.data) 
         };
     } catch (error) {
-        return { 
-            statusCode: 500, 
-            body: JSON.stringify({ error: error.message }) 
-        };
+        return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
     }
 };

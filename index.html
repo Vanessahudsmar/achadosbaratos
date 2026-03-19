@@ -212,7 +212,7 @@ async function carregarCategoria(termoBusca, idDoGrid) {
     try {
         // Chamada para a sua Netlify Function
         const url = `/.netlify/functions/shopee?keyword=${encodeURIComponent(termoBusca)}`;
-        console.log("Chamando API com URL:", url);
+        console.log("🔍 Chamando API com URL:", url);
         
         const resposta = await fetch(url, {
             method: 'GET',
@@ -221,47 +221,76 @@ async function carregarCategoria(termoBusca, idDoGrid) {
             }
         });
         
-        console.log("Status da resposta:", resposta.status);
+        console.log("📊 Status da resposta:", resposta.status);
         
         if (!resposta.ok) {
             throw new Error(`Erro HTTP ${resposta.status}: ${resposta.statusText}`);
         }
         
         const dados = await resposta.json();
-        console.log("Dados recebidos da API:", dados);
+        console.log("📦 Dados brutos recebidos:", dados);
+        console.log("📦 Estrutura de dados:", JSON.stringify(dados, null, 2));
 
         // PROTEÇÃO: Verifica se há erro na resposta
         if (dados.error) {
-            throw new Error(`Erro da API: ${dados.error}`);
+            console.error("❌ Erro retornado pela API:", dados.error);
+            throw new Error(`Erro da API: ${dados.error} - ${dados.details ? JSON.stringify(dados.details) : ''}`);
         }
 
-        // PROTEÇÃO: Verifica se a estrutura de dados da Shopee existe
-        if (dados && dados.data && dados.data.productOfferV2 && dados.data.productOfferV2.nodes) {
-            const produtos = dados.data.productOfferV2.nodes;
+        // Tenta várias estruturas de resposta
+        let produtos = null;
+        
+        // Estrutura 1: dados.data.productOfferV2.nodes
+        if (dados?.data?.productOfferV2?.nodes) {
+            console.log("✅ Usando estrutura: dados.data.productOfferV2.nodes");
+            produtos = dados.data.productOfferV2.nodes;
+        }
+        // Estrutura 2: dados.productOfferV2.nodes
+        else if (dados?.productOfferV2?.nodes) {
+            console.log("✅ Usando estrutura: dados.productOfferV2.nodes");
+            produtos = dados.productOfferV2.nodes;
+        }
+        // Estrutura 3: dados.nodes
+        else if (dados?.nodes) {
+            console.log("✅ Usando estrutura: dados.nodes");
+            produtos = dados.nodes;
+        }
+        // Estrutura 4: dados é um array
+        else if (Array.isArray(dados)) {
+            console.log("✅ Usando estrutura: dados é um array");
+            produtos = dados;
+        }
+        // Se nenhuma estrutura funcionar, mostra erro detalhado
+        else {
+            console.error("❌ Nenhuma estrutura válida encontrada em:", dados);
+            throw new Error(`Estrutura de dados inesperada. Resposta recebida: ${JSON.stringify(dados).substring(0, 200)}`);
+        }
 
-            if (produtos.length === 0) {
-                grid.innerHTML = '<p style="padding:20px; color:#666;">Nenhuma oferta encontrada no momento.</p>';
-                return;
-            }
+        if (!produtos || produtos.length === 0) {
+            console.warn("⚠️ Nenhum produto encontrado para:", termoBusca);
+            grid.innerHTML = '<p style="padding:20px; color:#666;">Nenhuma oferta encontrada no momento.</p>';
+            return;
+        }
 
-            grid.innerHTML = produtos.map(p => `
-                <div class="card">
-                    <div class="card-img">
-                        <img src="${p.imageUrl}" alt="${p.productName}" onerror="this.src='https://via.placeholder.com/200?text=Sem+Imagem'">
-                    </div>
-                    <div class="product-title">${p.productName || 'Produto'}</div>
-                    <div class="price">R$ ${parseFloat(p.price || 0).toFixed(2).replace('.', ',')}</div>
-                    <a href="${p.itemLink}" target="_blank" rel="noopener noreferrer" class="btn-view">VER OFERTA</a>
+        console.log(`✅ Carregados ${produtos.length} produtos`);
+        
+        grid.innerHTML = produtos.map((p, idx) => `
+            <div class="card">
+                <div class="card-img">
+                    <img src="${p.imageUrl || ''}" alt="${p.productName || 'Produto'}" onerror="this.src='https://via.placeholder.com/200?text=Sem+Imagem'">
                 </div>
-            `).join('');
-        } else {
-            throw new Error("Resposta da API em formato inesperado");
-        }
+                <div class="product-title">${p.productName || 'Produto sem nome'}</div>
+                <div class="price">R$ ${parseFloat(p.price || 0).toFixed(2).replace('.', ',')}</div>
+                <a href="${p.itemLink || '#'}" target="_blank" rel="noopener noreferrer" class="btn-view">VER OFERTA</a>
+            </div>
+        `).join('');
     } catch (erro) {
-        console.error("Erro ao carregar categoria:", erro);
-        grid.innerHTML = `<p style="color:#d32f2f; padding:15px; font-size:12px; line-height: 1.5;">
-            <i class="fas fa-exclamation-circle"></i> Erro ao carregar ofertas.<br>
-            <small>${erro.message || 'Tente atualizar a página'}</small>
+        console.error("❌ Erro ao carregar categoria:", erro);
+        console.error("Stack:", erro.stack);
+        grid.innerHTML = `<p style="color:#d32f2f; padding:15px; font-size:12px; line-height: 1.5; background: #ffe0e0; border-radius: 8px;">
+            <i class="fas fa-exclamation-circle"></i> <strong>Erro ao carregar ofertas</strong><br>
+            <small>${erro.message || 'Tente atualizar a página'}</small><br>
+            <small style="color:#999; margin-top: 5px; display: block;">Verifique o console do navegador (F12) para mais detalhes</small>
         </p>`;
     }
 }
@@ -282,7 +311,7 @@ function searchProducts() {
 
 // Inicialização
 window.addEventListener('load', () => {
-    console.log("Página carregada. Iniciando carregamento de categorias...");
+    console.log("🚀 Página carregada. Iniciando carregamento de categorias...");
     
     // Carrega cada categoria com um pequeno intervalo para não sobrecarregar a API
     const categorias = [
@@ -297,7 +326,7 @@ window.addEventListener('load', () => {
 
     categorias.forEach((cat, index) => {
         setTimeout(() => {
-            console.log(`Carregando categoria: ${cat[0]}`);
+            console.log(`⏳ Carregando categoria: ${cat[0]}`);
             carregarCategoria(cat[0], cat[1]);
         }, index * 500);
     });

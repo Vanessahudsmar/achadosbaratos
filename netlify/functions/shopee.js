@@ -20,6 +20,14 @@ exports.handler = async (event) => {
         .digest('hex');
 
     try {
+        console.log("=== SHOPEE API REQUEST ===");
+        console.log("URL:", url);
+        console.log("AppID:", appId);
+        console.log("Keyword:", keyword);
+        console.log("Query:", query);
+        console.log("Timestamp:", timestamp);
+        console.log("Signature:", signature);
+        
         const response = await axios.post(url, bodyStr, {
             headers: {
                 'Content-Type': 'application/json',
@@ -29,6 +37,10 @@ exports.handler = async (event) => {
             },
             timeout: 10000
         });
+        
+        console.log("=== SHOPEE API RESPONSE ===");
+        console.log("Status:", response.status);
+        console.log("Data:", JSON.stringify(response.data, null, 2));
         
         return { 
             statusCode: 200, 
@@ -41,10 +53,16 @@ exports.handler = async (event) => {
             body: JSON.stringify(response.data) 
         };
     } catch (error) {
-        console.error("Erro da API Shopee:", error.message);
+        console.error("=== ERRO NA API SHOPEE ===");
+        console.error("Mensagem:", error.message);
+        console.error("Status:", error.response?.status);
+        console.error("Dados de erro:", JSON.stringify(error.response?.data, null, 2));
+        
         const errorResponse = {
             error: error.message,
-            details: error.response ? error.response.data : "Erro de conexão com a Shopee API"
+            status: error.response?.status,
+            details: error.response ? error.response.data : "Erro de conexão com a Shopee API",
+            timestamp: new Date().toISOString()
         };
         
         return { 

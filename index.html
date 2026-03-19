@@ -211,11 +211,29 @@ async function carregarCategoria(termoBusca, idDoGrid) {
 
     try {
         // Chamada para a sua Netlify Function
-        const resposta = await fetch(`/.netlify/functions/shopee?keyword=${encodeURIComponent(termoBusca)}`);
+        const url = `/.netlify/functions/shopee?keyword=${encodeURIComponent(termoBusca)}`;
+        console.log("Chamando API com URL:", url);
         
-        if (!resposta.ok) throw new Error("Erro na resposta do servidor");
+        const resposta = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        console.log("Status da resposta:", resposta.status);
+        
+        if (!resposta.ok) {
+            throw new Error(`Erro HTTP ${resposta.status}: ${resposta.statusText}`);
+        }
         
         const dados = await resposta.json();
+        console.log("Dados recebidos da API:", dados);
+
+        // PROTEÇÃO: Verifica se há erro na resposta
+        if (dados.error) {
+            throw new Error(`Erro da API: ${dados.error}`);
+        }
 
         // PROTEÇÃO: Verifica se a estrutura de dados da Shopee existe
         if (dados && dados.data && dados.data.productOfferV2 && dados.data.productOfferV2.nodes) {
@@ -229,24 +247,43 @@ async function carregarCategoria(termoBusca, idDoGrid) {
             grid.innerHTML = produtos.map(p => `
                 <div class="card">
                     <div class="card-img">
-                        <img src="${p.imageUrl}" alt="${p.productName}" onerror="this.src='https://via.placeholder.com/200'">
+                        <img src="${p.imageUrl}" alt="${p.productName}" onerror="this.src='https://via.placeholder.com/200?text=Sem+Imagem'">
                     </div>
-                    <div class="product-title">${p.productName}</div>
-                    <div class="price">R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}</div>
-                    <a href="${p.itemLink}" target="_blank" class="btn-view">VER OFERTA</a>
+                    <div class="product-title">${p.productName || 'Produto'}</div>
+                    <div class="price">R$ ${parseFloat(p.price || 0).toFixed(2).replace('.', ',')}</div>
+                    <a href="${p.itemLink}" target="_blank" rel="noopener noreferrer" class="btn-view">VER OFERTA</a>
                 </div>
             `).join('');
         } else {
-            throw new Error("Estrutura de dados inválida");
+            throw new Error("Resposta da API em formato inesperado");
         }
     } catch (erro) {
-        console.error("Erro detalhado:", erro);
-        grid.innerHTML = '<p style="color:#d32f2f; padding:10px; font-size:12px;"><i class="fas fa-exclamation-circle"></i> Ofertas indisponíveis. Tente atualizar a página.</p>';
+        console.error("Erro ao carregar categoria:", erro);
+        grid.innerHTML = `<p style="color:#d32f2f; padding:15px; font-size:12px; line-height: 1.5;">
+            <i class="fas fa-exclamation-circle"></i> Erro ao carregar ofertas.<br>
+            <small>${erro.message || 'Tente atualizar a página'}</small>
+        </p>`;
     }
 }
 
+function searchProducts() {
+    const searchInput = document.getElementById('searchInput').value.trim();
+    
+    if (!searchInput) {
+        document.getElementById('search-results-area').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('search-results-area').style.display = 'block';
+    document.getElementById('main-content').style.display = 'none';
+    carregarCategoria(searchInput, 'grid-search');
+}
+
 // Inicialização
-window.onload = () => {
+window.addEventListener('load', () => {
+    console.log("Página carregada. Iniciando carregamento de categorias...");
+    
     // Carrega cada categoria com um pequeno intervalo para não sobrecarregar a API
     const categorias = [
         ['fone bluetooth', 'grid-fones'],
@@ -259,9 +296,12 @@ window.onload = () => {
     ];
 
     categorias.forEach((cat, index) => {
-        setTimeout(() => carregarCategoria(cat[0], cat[1]), index * 200);
+        setTimeout(() => {
+            console.log(`Carregando categoria: ${cat[0]}`);
+            carregarCategoria(cat[0], cat[1]);
+        }, index * 500);
     });
-};
+});
 
 function sideScroll(id, direcao) {
     const e = document.getElementById(id);

@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 exports.handler = async (event) => {
     const appId = "18373201007";
-    const secret = "QUXQ42B5CM32NKPC753DYINGKBY4FOWO";
+    const secret = "Y6G5VSILYVDHCCYOWGZIFZA65DW66WKY";
     const keyword = (event.queryStringParameters && event.queryStringParameters.keyword) || "ofertas";
     
     const url = "https://open-api.affiliate.shopee.com.br/graphql";
@@ -26,25 +26,34 @@ exports.handler = async (event) => {
                 'X-Shopee-AppID': appId,
                 'X-Shopee-Timestamp': timestamp.toString(),
                 'Authorization': `SHA256 ${signature}`
-            }
+            },
+            timeout: 10000
         });
         
         return { 
             statusCode: 200, 
             headers: { 
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*" 
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type"
             },
             body: JSON.stringify(response.data) 
         };
     } catch (error) {
+        console.error("Erro da API Shopee:", error.message);
+        const errorResponse = {
+            error: error.message,
+            details: error.response ? error.response.data : "Erro de conexão com a Shopee API"
+        };
+        
         return { 
             statusCode: 500, 
-            headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({ 
-                error: error.message,
-                details: error.response ? error.response.data : "Erro de conexão"
-            }) 
+            headers: { 
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*" 
+            },
+            body: JSON.stringify(errorResponse) 
         };
     }
 };

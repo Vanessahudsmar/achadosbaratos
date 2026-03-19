@@ -231,10 +231,17 @@ async function carregarCategoria(termoBusca, idDoGrid) {
         console.log("📦 Dados brutos recebidos:", dados);
         console.log("📦 Estrutura de dados:", JSON.stringify(dados, null, 2));
 
-        // PROTEÇÃO: Verifica se há erro na resposta
-        if (dados.error) {
-            console.error("❌ Erro retornado pela API:", dados.error);
-            throw new Error(`Erro da API: ${dados.error} - ${dados.details ? JSON.stringify(dados.details) : ''}`);
+        // PROTEÇÃO: Verifica se há erro GraphQL na resposta
+        if (dados.errors && dados.errors.length > 0) {
+            const erro = dados.errors[0];
+            console.error("❌ Erro GraphQL:", erro.message);
+            throw new Error(`Erro da API: ${erro.message}`);
+        }
+
+        // PROTEÇÃO: Verifica se há erro no fallback
+        if (dados._debug) {
+            console.warn("⚠️ Usando dados de fallback:", dados._debug.note);
+            console.warn("⚠️ Erro original:", dados._debug.error);
         }
 
         // Tenta várias estruturas de resposta
@@ -287,9 +294,16 @@ async function carregarCategoria(termoBusca, idDoGrid) {
     } catch (erro) {
         console.error("❌ Erro ao carregar categoria:", erro);
         console.error("Stack:", erro.stack);
+        
+        // Mensagem de erro específica
+        let mensagem = erro.message || 'Tente atualizar a página';
+        if (mensagem.includes('Invalid Credential')) {
+            mensagem = 'Invalid Credential - Credenciais da API Shopee inválidas. Verifique AppID e Secret Key.';
+        }
+        
         grid.innerHTML = `<p style="color:#d32f2f; padding:15px; font-size:12px; line-height: 1.5; background: #ffe0e0; border-radius: 8px;">
             <i class="fas fa-exclamation-circle"></i> <strong>Erro ao carregar ofertas</strong><br>
-            <small>${erro.message || 'Tente atualizar a página'}</small><br>
+            <small>${mensagem}</small><br>
             <small style="color:#999; margin-top: 5px; display: block;">Verifique o console do navegador (F12) para mais detalhes</small>
         </p>`;
     }

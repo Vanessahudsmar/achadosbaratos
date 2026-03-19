@@ -9,7 +9,8 @@ exports.handler = async (event) => {
     const url = "https://open-api.affiliate.shopee.com.br/graphql";
     
     // IMPORTANTE: A query precisa ser uma linha única, sem espaços extras para a assinatura bater
-    const query = `query { productOfferV2(keyword: "${keyword}", limit: 20) { nodes { productName price imageUrl itemLink } } }`;
+    // Aumentado para 50 produtos e adicionados mais campos (thumbnail, shopName, rating)
+    const query = `query { productOfferV2(keyword: "${keyword}", limit: 50) { nodes { productName price imageUrl thumbnail itemLink shopName rating } } }`;
     const bodyStr = JSON.stringify({ query });
 
     const timestamp = Math.floor(Date.now() / 1000);

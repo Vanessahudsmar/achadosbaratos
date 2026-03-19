@@ -139,6 +139,13 @@
                 <button class="carousel-arrow right" onclick="sideScroll('grid-fones', 'right')"><i class="fas fa-chevron-right"></i></button>
             </div>
 
+            <h3 class="sub-title">Fones Sem Fio</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-fones-sem-fio', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-fones-sem-fio"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-fones-sem-fio', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
             <h3 class="sub-title">Smartwatches</h3>
             <div class="carousel-wrapper">
                 <button class="carousel-arrow left" onclick="sideScroll('grid-relogios', 'left')"><i class="fas fa-chevron-left"></i></button>
@@ -146,18 +153,60 @@
                 <button class="carousel-arrow right" onclick="sideScroll('grid-relogios', 'right')"><i class="fas fa-chevron-right"></i></button>
             </div>
 
-            <h3 class="sub-title">Câmeras</h3>
+            <h3 class="sub-title">Câmeras e Segurança</h3>
             <div class="carousel-wrapper">
                 <button class="carousel-arrow left" onclick="sideScroll('grid-setup', 'left')"><i class="fas fa-chevron-left"></i></button>
                 <div class="product-grid" id="grid-setup"></div>
                 <button class="carousel-arrow right" onclick="sideScroll('grid-setup', 'right')"><i class="fas fa-chevron-right"></i></button>
             </div>
              
-            <h3 class="sub-title">Mundo Gamer</h3>
+            <h3 class="sub-title">Periféricos Gamer</h3>
             <div class="carousel-wrapper">
                 <button class="carousel-arrow left" onclick="sideScroll('grid-gadgets', 'left')"><i class="fas fa-chevron-left"></i></button>
                 <div class="product-grid" id="grid-gadgets"></div>
                 <button class="carousel-arrow right" onclick="sideScroll('grid-gadgets', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <h3 class="sub-title">Monitores</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-monitores', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-monitores"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-monitores', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <h3 class="sub-title">Teclados</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-teclados', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-teclados"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-teclados', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <h3 class="sub-title">Mouses</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-mouse', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-mouse"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-mouse', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <h3 class="sub-title">Cabos e Adaptadores</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-cabos', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-cabos"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-cabos', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <h3 class="sub-title">Carregadores Rápidos</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-carregadores', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-carregadores"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-carregadores', 'right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <h3 class="sub-title">Capinhas e Protetores</h3>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow left" onclick="sideScroll('grid-capinhas', 'left')"><i class="fas fa-chevron-left"></i></button>
+                <div class="product-grid" id="grid-capinhas"></div>
+                <button class="carousel-arrow right" onclick="sideScroll('grid-capinhas', 'right')"><i class="fas fa-chevron-right"></i></button>
             </div>
 
             <div id="beleza" class="section-banner"><img src="beleza.png"></div>
@@ -281,16 +330,41 @@ async function carregarCategoria(termoBusca, idDoGrid) {
 
         console.log(`✅ Carregados ${produtos.length} produtos`);
         
-        grid.innerHTML = produtos.map((p, idx) => `
-            <div class="card">
-                <div class="card-img">
-                    <img src="${p.imageUrl || ''}" alt="${p.productName || 'Produto'}" onerror="this.src='https://via.placeholder.com/200?text=Sem+Imagem'">
+        // Função para obter melhor URL de imagem
+        function getImageUrl(produto) {
+            // Tenta usar thumbnail primeiro (geralmente melhor qualidade)
+            if (produto.thumbnail) {
+                return produto.thumbnail;
+            }
+            // Se não tiver, usa imageUrl
+            if (produto.imageUrl) {
+                return produto.imageUrl;
+            }
+            // Fallback: placeholder
+            return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop';
+        }
+
+        // Renderiza os produtos
+        grid.innerHTML = produtos.map((p, idx) => {
+            const imageUrl = getImageUrl(p);
+            const preco = parseFloat(p.price || 0);
+            const precoFormatado = preco > 0 ? `R$ ${preco.toFixed(2).replace('.', ',')}` : 'Preço indisponível';
+            
+            return `
+                <div class="card">
+                    <div class="card-img">
+                        <img 
+                            src="${imageUrl}" 
+                            alt="${p.productName || 'Produto'}" 
+                            onerror="this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop'"
+                            style="width: 100%; height: 100%; object-fit: contain; background: #f5f5f5;">
+                    </div>
+                    <div class="product-title">${p.productName || 'Produto sem nome'}</div>
+                    <div class="price">${precoFormatado}</div>
+                    <a href="${p.itemLink || 'https://shopee.com.br'}" target="_blank" rel="noopener noreferrer" class="btn-view">VER OFERTA</a>
                 </div>
-                <div class="product-title">${p.productName || 'Produto sem nome'}</div>
-                <div class="price">R$ ${parseFloat(p.price || 0).toFixed(2).replace('.', ',')}</div>
-                <a href="${p.itemLink || '#'}" target="_blank" rel="noopener noreferrer" class="btn-view">VER OFERTA</a>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     } catch (erro) {
         console.error("❌ Erro ao carregar categoria:", erro);
         console.error("Stack:", erro.stack);
@@ -330,9 +404,16 @@ window.addEventListener('load', () => {
     // Carrega cada categoria com um pequeno intervalo para não sobrecarregar a API
     const categorias = [
         ['fone bluetooth', 'grid-fones'],
+        ['fone sem fio', 'grid-fones-sem-fio'],
         ['smartwatch serie 9', 'grid-relogios'],
         ['camera wifi seguranca', 'grid-setup'],
         ['teclado mecanico rgb', 'grid-gadgets'],
+        ['monitor led', 'grid-monitores'],
+        ['teclado sem fio', 'grid-teclados'],
+        ['mouse wireless', 'grid-mouse'],
+        ['cabo usb tipo c', 'grid-cabos'],
+        ['carregador rapido', 'grid-carregadores'],
+        ['capinha celular', 'grid-capinhas'],
         ['maquiagem kit', 'grid-beleza'],
         ['decoracao casa', 'grid-casa'],
         ['utilidades domesticas', 'grid-achados']
@@ -342,7 +423,7 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             console.log(`⏳ Carregando categoria: ${cat[0]}`);
             carregarCategoria(cat[0], cat[1]);
-        }, index * 500);
+        }, index * 400);
     });
 });
 
